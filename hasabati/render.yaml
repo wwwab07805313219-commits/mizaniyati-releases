@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: hasabati
+    rootDir: hasabati
+    runtime: node
+    plan: free
+    buildCommand: npm ci
+    startCommand: npm start
+    autoDeployTrigger: commit
+    healthCheckPath: /
+    envVars:
+      - key: HOST
+        value: 0.0.0.0
