@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>حاسباتي — أدوات وحاسبات تفاعلية سريعة</title>
+  <style>
+    /* =========================================
+       ١. المتغيرات والألوان العامة (سهل التعديل)
+       ========================================= */
+    :root {
+      --bg: #f3f7fc;
+      --surface: #ffffff;
+      --surface-alt: #f9fafb;
+      --text: #172344;
+      --muted: #4d5d78;
+      --primary: #4338ca;
+      --primary-hover: #3730a3;
+      --primary-soft: #eef2ff;
+      --border: #dce4f1;
+      --success: #047857;
+      --success-bg: #ecfdf5;
+      --radius: 20px;
+      --shadow: 0 6px 24px rgba(17, 24, 39, 0.06);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+    }
+
+    /* =========================================
+       ٢. الترويسة والقائمة العلوية
+       ========================================= */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .header-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 14px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .brand-badge {
+      background: var(--primary);
+      color: #fff;
+      font-size: 0.78rem;
+      padding: 3px 8px;
+      border-radius: 999px;
+    }
+
+    .nav-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .nav-btn {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      padding: 8px 13px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: 0.2s;
+    }
+
+    .nav-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .nav-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* =========================================
+       ٣. الحاوية الرئيسية ومساحات الإعلانات
+       ========================================= */
+    .container {
+      max-width: 1120px;
+      margin: 24px auto;
+      padding: 0 20px;
+    }
+
+    /* مساحة إعلانية مهيأة لـ Google AdSense أو شبكات الإعلانات */
+    .ad-slot {
+      background: var(--surface-alt);
+      border: 1px dashed #cbd5e1;
+      border-radius: var(--radius);
+      padding: 14px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-bottom: 22px;
+    }
+
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    @media (min-width: 900px) {
+      .main-grid {
+        grid-template-columns: 2.2fr 1fr;
+        align-items: start;
+      }
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .calc-header h1 {
+      margin: 0 0 6px;
+      font-size: 1.45rem;
+    }
+
+    .calc-header p {
+      margin: 0 0 20px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    /* =========================================
+       ٤. حقول الإدخال والأزرار والنتائج
+       ========================================= */
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      background: #fff;
+      color: var(--text);
+    }
+
+    .field input:focus,
+    .field select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(67, 56, 202, 0.12);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 10px;
+      padding: 11px 18px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+
+    .btn-secondary {
+      background: #f3f4f6;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: #dce4f1;
+    }
+
+    .result-box {
+      background: var(--primary-soft);
+      border: 1px solid #c7d2fe;
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 22px;
+    }
+
+    .result-title {
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 10px;
+      font-size: 1rem;
+    }
+
+    .result-items {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 12px;
+    }
+
+    .result-item {
+      background: #fff;
+      border-radius: 10px;
+      padding: 12px;
+      border: 1px solid #dbeafe;
+    }
+
+    .result-item span {
+      display: block;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .result-item strong {
+      font-size: 1.15rem;
+      color: var(--text);
+    }
+
+    .copied-msg {
+      display: none;
+      color: var(--success);
+      background: var(--success-bg);
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      align-self: center;
+    }
+
+    /* قسم الشرح والملاحظات أسفل الحاسبة (مهم لـ SEO والإعلانات) */
+    .guide-box {
+      border-top: 1px solid var(--border);
+      padding-top: 18px;
+    }
+
+    .guide-box h2 {
+      font-size: 1.1rem;
+      margin: 0 0 8px;
+    }
+
+    .guide-box p,
+    .guide-box li {
+      font-size: 0.93rem;
+      color: #374151;
+    }
+
+    .guide-box ul {
+      margin: 8px 0 0;
+      padding-right: 20px;
+    }
+
+    /* =========================================
+       ٥. القائمة الجانبية والتذييل
+       ========================================= */
+    aside .card {
+      margin-bottom: 20px;
+    }
+
+    aside h3 {
+      margin: 0 0 12px;
+      font-size: 1.05rem;
+    }
+
+    .quick-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .quick-list li {
+      margin-bottom: 8px;
+    }
+
+    .quick-list button {
+      width: 100%;
+      text-align: right;
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      padding: 9px 12px;
+      border-radius: 9px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+
+    .quick-list button:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      margin-top: 40px;
+      padding: 24px 20px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    footer a {
+      color: var(--primary);
+      text-decoration: none;
+      margin: 0 8px;
+    }
+    body {
+      background: radial-gradient(ellipse at top right, #e8eaff, transparent 36rem), var(--bg);
+    }
+
+    .nav-btn.active, .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #2459bb);
+    }
+
+    .tank-shapes {
+      grid-column: 1 / -1;
+      min-inline-size: 0;
+      margin: 0;
+      padding: 0;
+      border: 0;
+    }
+
+    .tank-shapes legend {
+      margin-bottom: 8px;
+      padding: 0;
+      font-size: .9rem;
+      font-weight: 600;
+    }
+
+    .shape-options {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .shape-option {
+      --shape-ink: #4338ca;
+      --shape-tint: #eef2ff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 12px 6px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--surface);
+      color: var(--shape-ink);
+      font-weight: 600;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .shape-option.cyl {
+      --shape-ink: #0f766e;
+      --shape-tint: #e4f8f4;
+    }
+
+    .shape-option:hover, .shape-option:has(input:checked) {
+      background: var(--shape-tint);
+      border-color: var(--shape-ink);
+    }
+
+    .shape-option:has(input:focus-visible) {
+      outline: 2px solid var(--shape-ink);
+      outline-offset: 3px;
+    }
+
+    .shape-option input {
+      align-self: flex-start;
+      margin: 0;
+      accent-color: var(--shape-ink);
+    }
+
+    .shape-option svg {
+      width: 60px;
+      max-width: 100%;
+      height: 46px;
+      fill: var(--shape-tint);
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .ui-icon {
+      width: 1.2em;
+      height: 1.2em;
+      vertical-align: -.22em;
+      margin-inline-end: .42em;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.7;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .calc-header .ui-icon { color: var(--primary); }
+  </style>
+<!-- advertising -->
+</head>
+<body>
+
+  <!-- الترويسة -->
+  <header>
+    <div class="header-inner">
+      <a href="#" class="brand" onclick="switchCalc('concrete'); return false;">
+        <span>حاسباتي</span>
+        <span class="brand-badge">نسخة تجريبية</span>
+      </a>
+
+      <!-- أزرار التنقل بين الحاسبات -->
+      <nav class="nav-tabs" aria-label="الحاسبات">
+        <button class="nav-btn active" data-calc="concrete" onclick="switchCalc('concrete')">حجم الخرسانة</button>
+        <button class="nav-btn" data-calc="tank" onclick="switchCalc('tank')">سعة الخزان</button>
+        <button class="nav-btn" data-calc="blocks" onclick="switchCalc('blocks')">كمية البلوك</button>
+        <button class="nav-btn" data-calc="cost" onclick="switchCalc('cost')">تقدير الكلفة</button>
+        <button class="nav-btn" data-calc="units" onclick="switchCalc('units')">تحويل الوحدات</button>
+      </nav>
+      <div aria-label="حساب المستخدم">
+        <span id="authStatus" role="status"></span>
+        <div id="googleButton"></div>
+        <button class="btn btn-secondary" id="logout" hidden>تسجيل الخروج</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <!-- مساحة إعلانية علوية (ضع كود الإعلان هنا عند الربط) -->
+    
+
+    <div class="main-grid">
+      <!-- المنطقة الرئيسية للحاسبة -->
+      <main class="card">
+        <div class="calc-header">
+          <h1 id="calcTitle">حاسبة حجم الخرسانة والمواد الأولية</h1>
+          <p id="calcDesc">احسب الحجم الكلي للخرسانة بالمتر المكعب مع إضافة نسبة الهدر وتقدير أولي للمواد.</p>
+        </div>
+
+        <!-- حقول الإدخال تُبنى ديناميكياً حسب الحاسبة المختارة -->
+        <div id="formFields" class="form-grid"></div>
+
+        <!-- أزرار التحكم -->
+        <div class="actions">
+          <button class="btn btn-primary" onclick="calculateCurrent()">احسب الآن</button>
+          <button class="btn btn-secondary" onclick="resetCurrent()">إعادة ضبط</button>
+          <button class="btn btn-secondary" onclick="copyResult()">نسخ النتيجة</button>
+          <span id="copiedMsg" class="copied-msg">تم نسخ النتيجة ✓</span>
+        </div>
+
+        <!-- صندوق النتائج -->
+        <div id="resultBox" class="result-box">
+          <div class="result-title">النتائج المحسوبة</div>
+          <div id="resultItems" class="result-items"></div>
+        </div>
+
+        <!-- شرح وملاحظات أسفل الحاسبة -->
+        <div id="guideBox" class="guide-box"></div>
+      </main>
+
+      <!-- القائمة الجانبية -->
+      <aside>
+        <div class="card">
+          <h3>انتقال سريع للحاسبات</h3>
+          <ul class="quick-list">
+            <li><button onclick="switchCalc('concrete')">١. حاسبة حجم الخرسانة والمواد</button></li>
+            <li><button onclick="switchCalc('tank')">٢. حاسبة سعة الخزانات والأحواض</button></li>
+            <li><button onclick="switchCalc('blocks')">٣. حاسبة كمية البلوك للجدران</button></li>
+            <li><button onclick="switchCalc('cost')">٤. حاسبة تقدير كلفة بند/مشروع</button></li>
+            <li><button onclick="switchCalc('units')">٥. حاسبة تحويل الوحدات</button></li>
+          </ul>
+        </div>
+
+        <!-- مساحة إعلانية جانبية -->
+        
+      </aside>
+    </div>
+  </div>
+
+  <!-- التذييل -->
+  <footer>
+    <div>
+      <details><summary>من نحن</summary><p>حاسباتي أداة عربية لتقدير مواد البناء وسعة الخزانات والكلفة وتحويل الوحدات. تعتمد النتائج على الأبعاد والأسعار التي تدخلها.</p></details>
+      <details><summary>سياسة الخصوصية</summary><p>تجري حساباتك داخل المتصفح. عند اختيار الدخول بحساب Google، يتحقق الخادم من هوية الحساب ويحتفظ مؤقتًا بمعرّفه واسم العرض في ذاكرته. يستخدم الموقع ملف ارتباط للجلسة ينتهي بعد ثماني ساعات، ويمكن إنهاؤها بتسجيل الخروج.</p><p>عند تفعيل الإعلانات، قد تستخدم Google وشركاؤها ملفات ارتباط لعرض الإعلانات وقياس أدائها وفق إعداداتك. <a href="https://policies.google.com/technologies/partner-sites?hl=ar">كيفية استخدام Google للبيانات</a></p></details>
+      <!-- contact -->
+    </div>
+    <p style="margin-top: 10px;">جميع الحقوق محفوظة © 2026 — الأرقام المعروضة استرشادية لأغراض التقدير السريع.</p>
+  </footer>
+
+  <script>
+    /* =========================================================================
+       ٦. تعريف الحاسبات ومعادلاتها (يمكنك تعديل القيم أو إضافة حاسبة جديدة هنا)
+       ========================================================================= */
+    const unitGroups = {
+      volume: {label: "الحجم والسعة", units: {"م³": 1000, "لتر": 1, "مل": 0.001, "سم³": 0.001}},
+      length: {label: "الطول", units: {"م": 1, "سم": 0.01, "ملم": 0.001, "كم": 1000, "قدم": 0.3048}},
+      area: {label: "المساحة", units: {"م²": 1, "سم²": 0.0001, "كم²": 1000000, "هكتار": 10000}},
+      mass: {label: "الكتلة", units: {"طن متري": 1000, "كغم": 1, "غرام": 0.001}},
+      flow: {label: "معدل التدفق", units: {"لتر/دقيقة": 1, "لتر/ساعة": 1/60, "م³/ساعة": 1000/60}}
+    };
+
+    function updateUnitOptions() {
+      const category = document.getElementById("input_category").value;
+      const names = Object.keys(unitGroups[category].units);
+      ["from", "to"].forEach((id, index) => {
+        const select = document.getElementById("input_" + id);
+        select.replaceChildren(...names.map(name => new Option(name, name)));
+        select.selectedIndex = index;
+      });
+    }
+
+    const calculators = {
+      concrete: {
+        title: "حاسبة حجم الخرسانة والمواد الأولية",
+        desc: "أدخل أبعاد العنصر الخرساني ونسبة الهدر لحساب الحجم بالمتر المكعب وتقدير استرشادي للمواد.",
+        fields: [
+          { id: "length", label: "الطول (متر)", type: "number", value: 6, step: "0.01", min: 0 },
+          { id: "width", label: "العرض (متر)", type: "number", value: 4, step: "0.01", min: 0 },
+          { id: "thicknessCm", label: "السُمك أو الارتفاع (سم)", type: "number", value: 15, step: "0.5", min: 0 },
+          { id: "waste", label: "نسبة الهدر (%)", type: "number", value: 5, step: "1", min: 0 }
+        ],
+        calc: (v) => {
+          const baseVol = v.length * v.width * (v.thicknessCm / 100);
+          const totalVol = baseVol * (1 + v.waste / 100);
+          // تقدير استرشادي تقريبي لكل 1 م3 خرسانة (يمكن تعديله حسب النسب المعتمدة)
+          const cementBags = totalVol * 7;
+          const gravelVol = totalVol * 0.8;
+          const sandVol = totalVol * 0.4;
+          return [
+            { label: "الحجم الصافي", value: `${baseVol.toFixed(2)} م³` },
+            { label: "الحجم شامل الهدر", value: `${totalVol.toFixed(2)} م³` },
+            { label: "أسمنت تقريبي (أكياس 50 كغم)", value: `${Math.ceil(cementBags)} كيس` },
+            { label: "حصى ورمل تقريبي", value: `${gravelVol.toFixed(2)} م³ / ${sandVol.toFixed(2)} م³` }
+          ];
+        },
+        guideTitle: "شرح طريقة الحساب وملاحظات عملية",
+        guideText: "يتم ضرب الطول × العرض × السُمك (محوّلاً إلى متر)، ثم تُضاف نسبة الهدر لتعويض الفاقد أثناء الصب والتسوية.",
+        guideTips: [
+          "انتبه لتحويل السُمك من السنتيمتر إلى المتر (مثلاً 15 سم = 0.15 م).",
+          "تقدير الأسمنت والحصى والرمل استرشادي ويختلف حسب مقاومة الخرسانة ونسب الخلط المعتمدة."
+        ]
+      },
+
+      tank: {
+        title: "حاسبة سعة الخزانات والأحواض وزمن الملء",
+        desc: "احسب السعة بالمتر المكعب واللتر والزمن التقريبي للملء حسب شكل الخزان ومعدل التدفق.",
+        fields: [
+          {
+            id: "shape",
+            label: "شكل الخزان / الحوض",
+            type: "tank-shape",
+            value: "rect",
+            options: [
+              { value: "rect", label: "مستطيل" },
+              { value: "cyl", label: "أسطواني" }
+            ]
+          },
+          { id: "dim1", label: "الطول أو القطر (متر)", type: "number", value: 3, step: "0.01", min: 0 },
+          { id: "dim2", label: "العرض (متر — للمستطيل فقط)", type: "number", value: 2, step: "0.01", min: 0 },
+          { id: "depth", label: "العمق الفعال للماء (متر)", type: "number", value: 1.5, step: "0.01", min: 0 },
+          { id: "flowLpm", label: "معدل التدفق (لتر / دقيقة)", type: "number", value: 30, step: "1", min: 0 }
+        ],
+        calc: (v) => {
+          let volM3 = 0;
+          if (v.shape === "rect") {
+            volM3 = v.dim1 * v.dim2 * v.depth;
+          } else {
+            const radius = v.dim1 / 2;
+            volM3 = Math.PI * radius * radius * v.depth;
+          }
+          const volLiters = volM3 * 1000;
+          const minutes = v.flowLpm > 0 ? volLiters / v.flowLpm : 0;
+          const hours = minutes / 60;
+          return [
+            { label: "السعة بالمتر المكعب", value: `${volM3.toFixed(2)} م³` },
+            { label: "السعة باللتر", value: `${Math.round(volLiters).toLocaleString("ar-EG")} لتر` },
+            { label: "زمن الملء التقريبي", value: v.flowLpm > 0 ? `${hours.toFixed(1)} ساعة (${Math.round(minutes)} د)` : "غير محدد" }
+          ];
+        },
+        guideTitle: "ملاحظات حول سعة الخزانات والأحواض",
+        guideText: "يُفضّل إدخال العمق التشغيلي الفعلي للمياه وليس الارتفاع الكلي للجدار لتفادي تجاوز الحد الأعلى.",
+        guideTips: [
+          "كل 1 متر مكعب يعادل 1,000 لتر.",
+          "للخزان الأسطواني يتم إدخال القطر الكامل (وليس نصف القطر) في خانة الطول/القطر."
+        ]
+      },
+
+      blocks: {
+        title: "حاسبة كمية البلوك أو الطابوق للجدران",
+        desc: "قدّر عدد وحدات البناء اللازمة لجدار بعد خصم الفتحات وإضافة نسبة الكسر والهدر.",
+        fields: [
+          { id: "wallL", label: "طول الجدار (متر)", type: "number", value: 10, step: "0.1", min: 0 },
+          { id: "wallH", label: "ارتفاع الجدار (متر)", type: "number", value: 3, step: "0.1", min: 0 },
+          { id: "openArea", label: "مساحة الفتحات — أبواب/شبابيك (م²)", type: "number", value: 2.4, step: "0.1", min: 0 },
+          { id: "blockLcm", label: "طول الوحدة (سم)", type: "number", value: 40, step: "1", min: 1 },
+          { id: "blockHcm", label: "ارتفاع الوحدة (سم)", type: "number", value: 20, step: "1", min: 1 },
+          { id: "waste", label: "نسبة الهدر والكسر (%)", type: "number", value: 7, step: "1", min: 0 }
+        ],
+        calc: (v) => {
+          const grossArea = v.wallL * v.wallH;
+          const netArea = Math.max(0, grossArea - v.openArea);
+          const unitAreaM2 = (v.blockLcm / 100) * (v.blockHcm / 100);
+          const rawUnits = unitAreaM2 > 0 ? netArea / unitAreaM2 : 0;
+          const totalUnits = Math.ceil(rawUnits * (1 + v.waste / 100));
+          return [
+            { label: "صافي مساحة الجدار", value: `${netArea.toFixed(2)} م²` },
+            { label: "عدد الوحدات بدون هدر", value: `${Math.ceil(rawUnits)} وحدة` },
+            { label: "العدد الإجمالي شامل الهدر", value: `${totalUnits} وحدة` }
+          ];
+        },
+        guideTitle: "كيفية حساب كمية البلوك بدقة",
+        guideText: "تُخصم مساحة الأبواب والشبابيك من المساحة الكلية للجدار، ثم تُقسم المساحة الصافية على مساحة الوحدة الواحدة.",
+        guideTips: [
+          "أبعاد الوحدة هنا تعتمد المساحة الوجهية دون احتساب سُمك المونة، لذا تُضاف نسبة هدر مناسبة."
+        ]
+      },
+
+      cost: {
+        title: "حاسبة تقدير كلفة بند أو مشروع بسيط",
+        desc: "احسب الكلفة الأولية للمواد واليد العاملة مع هامش طوارئ وتوزيع النسب.",
+        fields: [
+          { id: "qty", label: "الكمية أو المساحة", type: "number", value: 50, step: "0.5", min: 0 },
+          { id: "unitPrice", label: "سعر الوحدة (د.ع / وحدة)", type: "number", value: 25000, step: "100", min: 0 },
+          { id: "labor", label: "كلفة اليد العاملة / النقل الإضافية", type: "number", value: 150000, step: "1000", min: 0 },
+          { id: "contingency", label: "هامش طوارئ / هدر (%)", type: "number", value: 10, step: "1", min: 0 }
+        ],
+        calc: (v) => {
+          const matCost = v.qty * v.unitPrice;
+          const subTotal = matCost + v.labor;
+          const contingencyVal = subTotal * (v.contingency / 100);
+          const grandTotal = subTotal + contingencyVal;
+          const fmt = (n) => Math.round(n).toLocaleString("ar-EG");
+          return [
+            { label: "كلفة المواد / الكمية", value: fmt(matCost) },
+            { label: "هامش الطوارئ", value: fmt(contingencyVal) },
+            { label: "الإجمالي التقديري النهائي", value: fmt(grandTotal) }
+          ];
+        },
+        guideTitle: "نصائح لتقدير الكلف الأولية",
+        guideText: "تساعد هذه الحاسبة على بناء تصور سريع للميزانية قبل إعداد جدول كميات تفصيلي نهائي.",
+        guideTips: [
+          "يمكنك استخدام أي عملة محلية لأن الحساب يعتمد على القيم المدخلة مباشرة."
+        ]
+      },
+
+      units: {
+        title: "حاسبة تحويل الوحدات",
+        desc: "اختر فئة القياس ووحدتَي التحويل لعرض النتيجة وطريقة حسابها.",
+        fields: [
+          { id: "category", label: "فئة القياس", type: "select", value: "volume",
+            options: Object.entries(unitGroups).map(([value, group]) => ({value, label: group.label})) },
+          { id: "val", label: "القيمة", type: "number", value: 1, step: "any" },
+          { id: "from", label: "من وحدة", type: "select", options: [] },
+          { id: "to", label: "إلى وحدة", type: "select", options: [] }
+        ],
+        calc(v) {
+          const factors = unitGroups[v.category].units;
+          const factor = factors[v.from] / factors[v.to];
+          const fmt = n => Number(n.toPrecision(12)).toLocaleString("ar-IQ", {maximumSignificantDigits: 12});
+          return [
+            {label: "النتيجة", value: fmt(v.val * factor) + " " + v.to},
+            {label: "معامل التحويل", value: "١ " + v.from + " = " + fmt(factor) + " " + v.to},
+            {label: "طريقة الحساب", value: fmt(v.val) + " × " + fmt(factor) + " = " + fmt(v.val * factor)}
+          ];
+        },
+        guideTitle: "كيف تقرأ معامل التحويل؟",
+        guideText: "اضرب القيمة الأصلية في المعامل المعروض للحصول على القيمة بالوحدة المطلوبة.",
+        guideTips: ["المتر يساوي ١٠٠ سنتيمتر، والمتر المربع يساوي ١٠٬٠٠٠ سنتيمتر مربع.", "كل متر مكعب يسع ١٬٠٠٠ لتر."]
+      }
+    };
+
+    let currentKey = "concrete";
+    let lastSummaryText = "";
+
+    const tankIcons = {
+      rect: '<path d="M9 15 21 6h32v27l-12 9H9z"/><path d="M9 15h32l12-9M41 15v27" fill="none"/>',
+      cyl: '<path d="M11 12v24c0 5 9 9 21 9s21-4 21-9V12"/><ellipse cx="32" cy="12" rx="21" ry="9"/>'
+    };
+
+    function renderTankShapes(field) {
+      const group = document.createElement("fieldset");
+      group.className = "tank-shapes";
+      const legend = document.createElement("legend");
+      legend.textContent = field.label;
+      group.appendChild(legend);
+
+      const options = document.createElement("div");
+      options.className = "shape-options";
+      field.options.forEach((option) => {
+        const card = document.createElement("label");
+        card.className = "shape-option " + option.value;
+        card.innerHTML = '<svg viewBox="0 0 64 48" aria-hidden="true" focusable="false">' +
+          tankIcons[option.value] + '</svg>';
+        const radio = document.createElement("input");
+        radio.type = "radio";
+        radio.name = field.id;
+        radio.value = option.value;
+        radio.checked = option.value === field.value;
+        radio.addEventListener("change", calculateCurrent);
+        card.prepend(radio);
+        card.append(option.label);
+        options.appendChild(card);
+      });
+      group.appendChild(options);
+      return group;
+    }
+
+    function switchCalc(key) {
+      if (!calculators[key]) return;
+      currentKey = key;
+
+      document.querySelectorAll(".nav-btn").forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.calc === key);
+      });
+
+      const cfg = calculators[key];
+      document.getElementById("calcTitle").textContent = cfg.title;
+      document.getElementById("calcDesc").textContent = cfg.desc;
+
+      document.getElementById("calcTitle").insertAdjacentHTML("afterbegin", icon(key));
+      const formEl = document.getElementById("formFields");
+      formEl.innerHTML = "";
+
+      cfg.fields.forEach((f) => {
+        if (f.type === "tank-shape") {
+          formEl.appendChild(renderTankShapes(f));
+          return;
+        }
+        const wrap = document.createElement("div");
+        wrap.className = "field";
+
+        const label = document.createElement("label");
+        label.setAttribute("for", "input_" + f.id);
+        label.textContent = f.label;
+        wrap.appendChild(label);
+
+        let inputEl;
+        if (f.type === "select") {
+          inputEl = document.createElement("select");
+          f.options.forEach((opt) => {
+            const o = document.createElement("option");
+            o.value = opt.value;
+            o.textContent = opt.label;
+            if (opt.value === f.value) o.selected = true;
+            inputEl.appendChild(o);
+          });
+        } else {
+          inputEl = document.createElement("input");
+          inputEl.type = f.type || "number";
+          inputEl.value = f.value;
+          if (f.step !== undefined) inputEl.step = f.step;
+          if (f.min !== undefined) inputEl.min = f.min;
+        }
+
+        inputEl.id = "input_" + f.id;
+        if (f.id === "category") inputEl.addEventListener("input", updateUnitOptions);
+        inputEl.addEventListener("input", calculateCurrent);
+        wrap.appendChild(inputEl);
+        formEl.appendChild(wrap);
+      });
+
+      if (key === "units") updateUnitOptions();
+      const guideEl = document.getElementById("guideBox");
+      guideEl.innerHTML = `
+        <h2>${cfg.guideTitle}</h2>
+        <p>${cfg.guideText}</p>
+        <ul>${cfg.guideTips.map((t) => `<li>${t}</li>`).join("")}</ul>
+      `;
+
+      document.getElementById("copiedMsg").style.display = "none";
+      calculateCurrent();
+    }
+
+    function getValues() {
+      const cfg = calculators[currentKey];
+      const vals = {};
+      cfg.fields.forEach((f) => {
+        if (f.type === "tank-shape") {
+          vals[f.id] = document.querySelector('#formFields input[name="shape"]:checked').value;
+          return;
+        }
+        const el = document.getElementById("input_" + f.id);
+        vals[f.id] = f.type === "select" ? el.value : parseFloat(el.value) || 0;
+      });
+      return vals;
+    }
+
+    function calculateCurrent() {
+      const cfg = calculators[currentKey];
+      const items = cfg.calc(getValues());
+      const resContainer = document.getElementById("resultItems");
+      resContainer.innerHTML = "";
+
+      const lines = [`${cfg.title}:`];
+      items.forEach((item) => {
+        const box = document.createElement("div");
+        box.className = "result-item";
+        box.innerHTML = `<span>${item.label}</span><strong>${item.value}</strong>`;
+        resContainer.appendChild(box);
+        lines.push(`- ${item.label}: ${item.value}`);
+      });
+
+      lastSummaryText = lines.join("\n");
+    }
+
+    function resetCurrent() {
+      switchCalc(currentKey);
+    }
+
+    function copyResult() {
+      if (!lastSummaryText) return;
+      navigator.clipboard?.writeText(lastSummaryText).then(() => {
+        const msg = document.getElementById("copiedMsg");
+        msg.style.display = "inline-block";
+        setTimeout(() => (msg.style.display = "none"), 2200);
+      });
+    }
+
+    // تشغيل الحاسبة الأولى تلقائياً عند فتح الصفحة
+    const iconPaths = {
+      "concrete": "M2 13h3l3-7 7 2 2 5-6 3-6-3m12 0h3l2 4v2h-2m-4 0H8m-5 0H2v-6 M8 20a2 2 0 1 0-4 0 2 2 0 1 0 4 0m12 0a2 2 0 1 0-4 0 2 2 0 1 0 4 0",
+      "blocks": "M2 5h20v14H2z M2 12h20 M9 5v7m7 0v7",
+      "tank": "M4 6c0-5 16-5 16 0s-16 5-16 0v12c0 5 16 5 16 0V6",
+      "cost": "M4 5h16v15H4z M7 9h10m-9 4h1m4 0h2m-7 4h1m4 0h2",
+      "units": "M3 7h17l-4-4m5 14H4l4 4",
+      "calculate": "M4 3h16v18H4z M7 8h10m-9 5h2m4 0h2m-8 4h2m4 0h2",
+      "reset": "M4 9a8 8 0 1 1 0 7 M3 3v7h7",
+      "copy": "M8 8h13v13H8z M4 16H2V2h14v2",
+      "results": "M3 3v18h18 M7 17v-4m5 4V9m5 8V6"
+};
+    function icon(name) {
+      return '<svg class="ui-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="' + iconPaths[name] + '"/></svg>';
+    }
+    document.querySelectorAll(".nav-btn").forEach(button => {
+      button.insertAdjacentHTML("afterbegin", icon(button.dataset.calc));
+    });
+    document.querySelectorAll(".quick-list button").forEach(button => {
+      const key = button.getAttribute("onclick").match(/'([^']+)'/)[1];
+      button.insertAdjacentHTML("afterbegin", icon(key));
+    });
+    ["calculate", "reset", "copy"].forEach((name, index) => {
+      document.querySelectorAll(".actions button")[index].insertAdjacentHTML("afterbegin", icon(name));
+    });
+    document.querySelector(".result-title").insertAdjacentHTML("afterbegin", icon("results"));
+    switchCalc("concrete");
+    async function setupAccount() {
+      const status = document.getElementById("authStatus");
+      const button = document.getElementById("googleButton");
+      const logout = document.getElementById("logout");
+      if (location.protocol === "file:") {
+        status.textContent = "لتسجيل الدخول باستخدام Google، افتح حاسباتي من خادم الموقع.";
+        return;
+      }
+      try {
+        const response = await fetch("/api/account");
+        if (!response.ok) throw Error();
+        const {user, clientId} = await response.json();
+        if (user) {
+          status.textContent = "مرحبًا، " + user.name;
+          logout.hidden = false;
+          logout.onclick = async () => {
+            try {
+              const result = await fetch("/api/logout", {method:"POST", headers:{"X-Hasabati":"1"}});
+              if (!result.ok) throw Error();
+              location.reload();
+            } catch { status.textContent = "تعذّر تسجيل الخروج. حاول مجددًا."; }
+          };
+          return;
+        }
+        if (!clientId) {
+          status.textContent = "تسجيل الدخول باستخدام Google بانتظار تفعيل الموقع.";
+          return;
+        }
+        const sdk = document.createElement("script");
+        sdk.src = "https://accounts.google.com/gsi/client?hl=ar";
+        await new Promise((resolve, reject) => {
+          sdk.onload = resolve;
+          sdk.onerror = reject;
+          document.head.appendChild(sdk);
+        });
+        google.accounts.id.initialize({client_id:clientId, auto_select:false, callback: async ({credential}) => {
+          try {
+            const result = await fetch("/api/login", {method:"POST", headers:{"Content-Type":"application/json","X-Hasabati":"1"}, body:JSON.stringify({credential})});
+            if (!result.ok) throw Error();
+            location.reload();
+          } catch { status.textContent = "تعذّر تسجيل الدخول. حاول مجددًا."; }
+        }});
+        google.accounts.id.renderButton(button, {theme:"outline",size:"large",locale:"ar"});
+      } catch { status.textContent = "تعذّر الاتصال بخدمة تسجيل الدخول."; }
+    }
+    setupAccount();
+  </script>
+</body>
+</html>
