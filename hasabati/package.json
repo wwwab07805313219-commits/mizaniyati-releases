@@ -1,0 +1,5 @@
+{
+  "private": true,
+  "scripts": {"start": "node server.mjs"},
+  "dependencies": {"google-auth-library": "^10.0.0"}
+}
